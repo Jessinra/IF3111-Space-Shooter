@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RandomRotater : MonoBehaviour
 {
-    [SerializeField] private float tumble;
+    [SerializeField] private float tumble = 0.0F;
 
     private Rigidbody rigidBody;
 

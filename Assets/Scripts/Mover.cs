@@ -6,7 +6,7 @@ public class Mover : MonoBehaviour
 {
     private Rigidbody rigidBody;
     
-    [SerializeField] private float speed;
+    [SerializeField] private float speed = 0.0F;
 
     void Start() {
         rigidBody = GetComponent<Rigidbody>();

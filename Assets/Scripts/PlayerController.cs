@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    [SerializeField] private float speed;
-    [SerializeField] private float tilt;
+    [SerializeField] private float speed = 0.0F;
+    [SerializeField] private float tilt = 0.0F;
 
-    [SerializeField] private MovementBorderConfig movementBorderConfig;
-    [SerializeField] private ShotConfig shotConfig;
+    [SerializeField] private MovementBorderConfig movementBorderConfig = null;
+    [SerializeField] private ShotConfig shotConfig = null;
 
     private Rigidbody rigidBody;
     private float nextShot = 0.0F;
