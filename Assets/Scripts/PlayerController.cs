@@ -17,12 +17,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
-
-        if (Input.GetButton("Fire1") && Time.time > nextShot) {
-            nextShot = Time.time + shotConfig.shotDelay;
-            Instantiate(shotConfig.bullet,
-                shotConfig.shotSpawnPoint.position,
-                shotConfig.shotSpawnPoint.rotation);
+        if (ableToShot()) {
+            createShot();
         }
     }
 
@@ -40,6 +36,17 @@ public class PlayerController : MonoBehaviour {
         );
 
         rigidBody.rotation = Quaternion.Euler(0.0f, 0.0f, rigidBody.velocity.x * -tilt);
+    }
+
+    private bool ableToShot(){
+        return Input.GetButton("Fire1") && Time.time > nextShot;
+    }
+
+    private void createShot() {
+        nextShot = Time.time + shotConfig.shotDelay;
+        Instantiate(shotConfig.bullet,
+            shotConfig.shotSpawnPoint.position,
+            shotConfig.shotSpawnPoint.rotation);
     }
 }
 
