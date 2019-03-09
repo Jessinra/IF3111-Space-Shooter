@@ -44,7 +44,7 @@ public class GameController : MonoBehaviour {
     }
 
     private void createHazard() {
-        Instantiate(hazardConfig.hazard, hazardConfig.getNewSpawnPoint(), hazardConfig.getSpawnRotation());
+        Instantiate(hazardConfig.getRandomHazard(), hazardConfig.getNewSpawnPoint(), hazardConfig.getSpawnRotation());
     }
 
     public void gameOver() {
@@ -69,7 +69,7 @@ public class GameController : MonoBehaviour {
 
 [System.Serializable]
 public class HazardConfig {
-    public GameObject hazard;
+    public GameObject[] hazards;
     public Vector3 spawnPointValues;
 
     public int hazardPerWave = 5;
@@ -91,6 +91,10 @@ public class HazardConfig {
         spawnPoint.z = spawnPointValues.z;
 
         return spawnPoint;
+    }
+
+    public GameObject getRandomHazard(){
+        return hazards[Random.Range(0, hazards.Length)];
     }
 
     public Quaternion getSpawnRotation() {
