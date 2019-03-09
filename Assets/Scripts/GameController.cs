@@ -62,6 +62,11 @@ public class GameController : MonoBehaviour {
         scoreConfig.updateScore(score);
     }
 
+    public void addScoreEnemy() {
+        addScore(scoreConfig.enemyScore);
+        scoreConfig.updateScore(score);
+    }
+
     private void addScore(int score) {
         this.score += score;
     }
@@ -118,6 +123,7 @@ public class HazardConfig {
 public class ScoreConfig {
     public Text scoreText;
     public int asteroidScore;
+    public int enemyScore;
 
     public void updateScore(int score) {
         scoreText.text = "Score : " + score;
