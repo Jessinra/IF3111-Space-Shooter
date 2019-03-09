@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float speed = 0.0F;
     [SerializeField] private float tilt = 0.0F;
 
-    [SerializeField] private MovementBorderConfig movementBorderConfig = null;
+    [SerializeField] private MovementBoundary boundary = null;
     [SerializeField] private ShotConfig shotConfig = null;
 
     private Rigidbody rigidBody;
@@ -30,9 +30,9 @@ public class PlayerController : MonoBehaviour {
         rigidBody.velocity = movement * speed;
 
         rigidBody.position = new Vector3(
-            Mathf.Clamp(rigidBody.position.x, movementBorderConfig.xMin, movementBorderConfig.xMax),
+            Mathf.Clamp(rigidBody.position.x, boundary.xMin, boundary.xMax),
             0.0f,
-            Mathf.Clamp(rigidBody.position.z, movementBorderConfig.zMin, movementBorderConfig.zMax)
+            Mathf.Clamp(rigidBody.position.z, boundary.zMin, boundary.zMax)
         );
 
         rigidBody.rotation = Quaternion.Euler(0.0f, 0.0f, rigidBody.velocity.x * -tilt);
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour {
 }
 
 [System.Serializable]
-public class MovementBorderConfig {
+public class MovementBoundary {
     public float xMin, xMax, zMin, zMax;
 }
 
