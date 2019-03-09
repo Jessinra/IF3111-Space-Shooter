@@ -28,6 +28,7 @@ public class DestroyByContact : MonoBehaviour {
 
         if (other.tag == "Player") {
             createPlayerExplosion();
+            gameController.gameOver();
         }
 
         if (other.tag == "Weapon"){

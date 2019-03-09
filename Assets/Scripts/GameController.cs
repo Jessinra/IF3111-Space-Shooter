@@ -1,51 +1,70 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
     [SerializeField] private HazardConfig hazardConfig = null;
     [SerializeField] private ScoreConfig scoreConfig = null;
+    [SerializeField] private UITextConfig uiTextConfig = null;
 
     private int score = 0;
+    private bool isGameOver = false;
+    private bool enableRestart = false;
 
     // Start is called before the first frame update
     void Start() {
+        scoreConfig.updateScore(score);
+        uiTextConfig.hideAll();
+
         StartCoroutine("spawnWaves");
-        updateScore();
+    }
+
+    void Update() {
+        if (enableRestart) {
+            if (Input.GetKeyDown(KeyCode.R)) {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        }
     }
 
     IEnumerator spawnWaves() {
 
-        while (true) {
+        while (!(isGameOver)) {
             for (int i = 0; i < hazardConfig.hazardPerWave; i++) {
                 createHazard();
                 yield return new WaitForSeconds(hazardConfig.spawnCooldown);
             }
-
             hazardConfig.increaseDifficulty();
             yield return new WaitForSeconds(hazardConfig.waveCooldown);
         }
+        showRestartScreen();
     }
 
     private void createHazard() {
         Instantiate(hazardConfig.hazard, hazardConfig.getNewSpawnPoint(), hazardConfig.getSpawnRotation());
     }
 
-    public void addScoreAsteroid(){
-        addScore(scoreConfig.asteroidScore);
-        updateScore();
+    public void gameOver() {
+        isGameOver = true;
+        uiTextConfig.showGameOver();
     }
 
-    private void addScore(int score){
+    private void showRestartScreen() {
+        uiTextConfig.showRestart();
+        enableRestart = true;
+    }
+
+    public void addScoreAsteroid() {
+        addScore(scoreConfig.asteroidScore);
+        scoreConfig.updateScore(score);
+    }
+
+    private void addScore(int score) {
         this.score += score;
     }
-
-    private void updateScore(){
-        scoreConfig.scoreText.text = "Score : " + score;
-    }
-
 }
 
 [System.Serializable]
@@ -92,7 +111,30 @@ public class HazardConfig {
 }
 
 [System.Serializable]
-public class ScoreConfig{
+public class ScoreConfig {
     public Text scoreText;
     public int asteroidScore;
+
+    public void updateScore(int score) {
+        scoreText.text = "Score : " + score;
+    }
+}
+
+[System.Serializable]
+public class UITextConfig {
+    public Text restartText;
+    public Text gameOverText;
+
+    public void hideAll() {
+        restartText.text = "";
+        gameOverText.text = "";
+    }
+
+    public void showRestart() {
+        restartText.text = "Press 'R' for restart";
+    }
+
+    public void showGameOver() {
+        gameOverText.text = "GAME OVER";
+    }
 }
