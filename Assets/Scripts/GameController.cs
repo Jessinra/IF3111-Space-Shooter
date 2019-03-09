@@ -1,17 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-    [SerializeField] private HazardConfig hazardConfig;
+    [SerializeField] private HazardConfig hazardConfig = null;
+    [SerializeField] private ScoreConfig scoreConfig = null;
+
+    private int score = 0;
 
     // Start is called before the first frame update
     void Start() {
-        StartCoroutine("SpawnWaves");
+        StartCoroutine("spawnWaves");
+        updateScore();
     }
 
-    IEnumerator SpawnWaves() {
+    IEnumerator spawnWaves() {
 
         while (true) {
             for (int i = 0; i < hazardConfig.hazardPerWave; i++) {
@@ -27,6 +32,20 @@ public class GameController : MonoBehaviour {
     private void createHazard() {
         Instantiate(hazardConfig.hazard, hazardConfig.getNewSpawnPoint(), hazardConfig.getSpawnRotation());
     }
+
+    public void addScoreAsteroid(){
+        addScore(scoreConfig.asteroidScore);
+        updateScore();
+    }
+
+    private void addScore(int score){
+        this.score += score;
+    }
+
+    private void updateScore(){
+        scoreConfig.scoreText.text = "Score : " + score;
+    }
+
 }
 
 [System.Serializable]
@@ -70,4 +89,10 @@ public class HazardConfig {
         waveCooldown -= decreaseSpawnCooldown;
 
     }
+}
+
+[System.Serializable]
+public class ScoreConfig{
+    public Text scoreText;
+    public int asteroidScore;
 }

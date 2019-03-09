@@ -3,8 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DestroyByContact : MonoBehaviour {
-    [SerializeField] private GameObject explosion;
-    [SerializeField] private GameObject playerExplosion;
+    [SerializeField] private GameObject explosion = null;
+    [SerializeField] private GameObject playerExplosion = null;
+    
+    private GameController gameController;
+
+    void Start(){
+        GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+        if (gameControllerObject != null){
+            gameController = gameControllerObject.GetComponent<GameController>();
+        }
+        if (gameController == null){
+            Debug.Log("Cannot find 'GameController' object");
+        }
+    }
+
 
     // Destroy everything that enters the trigger
     void OnTriggerEnter(Collider other) {
@@ -15,6 +28,10 @@ public class DestroyByContact : MonoBehaviour {
 
         if (other.tag == "Player") {
             createPlayerExplosion();
+        }
+
+        if (other.tag == "Weapon"){
+            gameController.addScoreAsteroid();
         }
 
         createExplosion();
