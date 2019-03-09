@@ -4,24 +4,28 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
-    [SerializeField] private HazardConfig HazardConfig;
+    [SerializeField] private HazardConfig hazardConfig;
 
     // Start is called before the first frame update
     void Start() {
-        SpawnWaves();
+        StartCoroutine("SpawnWaves");
     }
 
-    // Update is called once per frame
-    void Update() {
+    IEnumerator SpawnWaves() {
 
-    }
+        while (true) {
+            for (int i = 0; i < hazardConfig.hazardPerWave; i++) {
+                createHazard();
+                yield return new WaitForSeconds(hazardConfig.spawnCooldown);
+            }
 
-    private void SpawnWaves() {
-        createHazard();
+            hazardConfig.increaseDifficulty();
+            yield return new WaitForSeconds(hazardConfig.waveCooldown);
+        }
     }
 
     private void createHazard() {
-        Instantiate(HazardConfig.hazard, HazardConfig.getNewSpawnPoint(), HazardConfig.getSpawnRotation());
+        Instantiate(hazardConfig.hazard, hazardConfig.getNewSpawnPoint(), hazardConfig.getSpawnRotation());
     }
 }
 
@@ -29,6 +33,15 @@ public class GameController : MonoBehaviour {
 public class HazardConfig {
     public GameObject hazard;
     public Vector3 spawnPointValues;
+
+    public int hazardPerWave = 5;
+    public float spawnCooldown = 0.5F;
+    public float waveCooldown = 5.0F;
+
+    public int increaseHazardPerWave = 0;
+    public float decreaseSpawnCooldown = 0.0F;
+    public float decreaseWaveCooldown = 0.0F;
+
     private Quaternion spawnRotation = Quaternion.identity;
 
     public Vector3 getNewSpawnPoint() {
@@ -42,11 +55,19 @@ public class HazardConfig {
         return spawnPoint;
     }
 
-    public Quaternion getSpawnRotation(){
+    public Quaternion getSpawnRotation() {
         return spawnRotation;
     }
 
     private float getRandomX() {
         return Random.Range(-spawnPointValues.x, spawnPointValues.x);
+    }
+
+    public void increaseDifficulty() {
+
+        hazardPerWave += increaseHazardPerWave;
+        spawnCooldown -= decreaseWaveCooldown;
+        waveCooldown -= decreaseSpawnCooldown;
+
     }
 }
