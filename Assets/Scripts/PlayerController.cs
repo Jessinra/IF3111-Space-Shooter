@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour {
         Instantiate(shotConfig.bullet,
             shotConfig.shotSpawnPoint.position,
             shotConfig.shotSpawnPoint.rotation);
+
+        GetComponent<AudioSource>().Play();
     }
 }
 
